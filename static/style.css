@@ -1,0 +1,74 @@
+/* General Styling */
+body {
+    background-image: url('https://cdn.shopify.com/s/files/1/0633/7039/5889/files/junkfood_widescreen.jpg?v=1647737356'); /* Sample food background */
+    background-size: cover;
+    background-position: center;
+    font-family: 'Poppins', sans-serif;
+    /* background-color: #f0f0f0; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px; /* Increased padding */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 350px; /* Increased width for larger padding */
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="password"] {
+    padding: 12px; /* Added padding to input fields */
+    margin-bottom: 16px; /* Spacing between input fields */
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+button {
+    padding: 12px 20px;
+    background-color: #d10c21;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #fed717;
+}
+
+p {
+    margin-top: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: #6c63ff;
+}
+
+a:hover {
+    text-decoration: underline;
+}
