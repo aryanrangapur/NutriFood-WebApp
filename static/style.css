@@ -14,10 +14,10 @@ body {
 
 .container {
     background-color: #ffffff;
-    padding: 40px; /* Increased padding */
+    padding: 40px; 
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    width: 350px; /* Increased width for larger padding */
+    width: 350px; 
     text-align: center;
 }
 
@@ -38,8 +38,8 @@ label {
 }
 
 input[type="text"], input[type="password"] {
-    padding: 12px; /* Added padding to input fields */
-    margin-bottom: 16px; /* Spacing between input fields */
+    padding: 12px; 
+    margin-bottom: 16px; 
     border-radius: 5px;
     border: 1px solid #ddd;
     font-size: 16px;

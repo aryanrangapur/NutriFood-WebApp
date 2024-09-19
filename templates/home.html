@@ -10,36 +10,29 @@
     <div class="container">
         <h2>Food Classification</h2>
 
-        <!-- Form to upload image -->
         <form action="/home" method="POST" enctype="multipart/form-data">
             <label for="file">Upload an image of food:</label>
             <input type="file" id="file" name="file" accept="image/*" required>
 
-            <!-- Button to trigger file upload -->
             <button type="submit">Upload and Classify</button>
         </form>
 
-        <!-- Display prediction result if available -->
         {% if prediction_result %}
         <h3>Prediction: {{ prediction_result }}</h3>
         {% endif %}
 
-        <!-- Option for capturing an image with the camera -->
         <h3>OR</h3>
         <button id="cameraButton">Take a picture with the camera</button>
         
-        <!-- Video element to capture camera input -->
         <video id="video" width="320" height="240" autoplay></video>
         <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
         
         <script>
-            // JavaScript to capture camera input
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
             const context = canvas.getContext('2d');
             const cameraButton = document.getElementById('cameraButton');
 
-            // Request access to the camera
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(function(stream) {
                     video.srcObject = stream;

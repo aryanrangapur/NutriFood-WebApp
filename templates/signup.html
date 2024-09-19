@@ -6,7 +6,6 @@
     <title>Sign Up</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        /* Style the error message */
         .error-message {
             color: red;
             margin-top: 10px;
@@ -27,7 +26,6 @@
         </form>
         <p>Already have an account? <a href="/signin">Sign In</a></p>
 
-        <!-- Error message displayed below the form -->
         {% if error_message %}
             <p class="error-message">{{ error_message }}</p>
         {% endif %}
