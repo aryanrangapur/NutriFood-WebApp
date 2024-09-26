@@ -11,7 +11,7 @@ import io
 app = Flask(__name__)
 
 # MongoDB connection
-client = MongoClient("mongodb+srv://aryanrangapur414:aryanbhai@cluster0.mbryk.mongodb.net/")
+client = MongoClient("mongodb+srv://aryanrangapur414:aryanbhai@cluster0.mbryk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db = client['user_db']
 users_collection = db['users']
 
@@ -24,6 +24,7 @@ def index():
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
+    error_message = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -32,9 +33,9 @@ def signin():
         if user and check_password_hash(user['password'], password):
             return redirect(url_for('home'))
         else:
-            return "Invalid credentials. Try again."
+            error_message="Invalid credentials. Try again."
     
-    return render_template('signin.html')
+    return render_template('signin.html',error_message=error_message)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -121,4 +122,5 @@ def predict_image(image):
     # return label_map.get(label[0], "Unknown food")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
