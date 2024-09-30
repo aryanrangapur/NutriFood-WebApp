@@ -18,11 +18,10 @@ client = MongoClient("mongodb+srv://aryanrangapur414:aryanbhai@cluster0.mbryk.mo
 db = client['user_db']
 users_collection = db['users']
 
-# Load your trained food classification model
 def custom_binary_crossentropy(*args, **kwargs):
     return tf.keras.losses.BinaryCrossentropy()
 
-# Load the model with a custom loss function
+
 model = tf.keras.models.load_model('food_CNN.h5', custom_objects={'BinaryCrossentropy': custom_binary_crossentropy})
 
 @app.route('/')
@@ -89,26 +88,25 @@ def classify():
     if file.filename == '':
         return redirect(request.url)
 
-    # Validate file type
+    # validate file type
     if not allowed_file(file.filename):
         return render_template('result.html', prediction="This file type is not allowed.")
 
     try:
         img = Image.open(file.stream)
 
-        # Convert image to base64 to pass it to the template
+        # convert image to base64 to pass it to the template 
         img_io = io.BytesIO()
         img.save(img_io, format='JPEG')
         img_io.seek(0)
         img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
 
-        # Get the prediction
         prediction = predict_image(model, img, class_names)
 
-        # Redirect to the result page with the prediction and the image
+        # result page with the prediction and the image
         return render_template('result.html', prediction=prediction, img_data=img_base64)
     except OSError:
-        return render_template('result.html', prediction="This file type is not allowed.")
+        return render_template('result.html', prediction="This file type is not allowed.") #for diff types of files
 
 
 @app.route('/classify-camera', methods=['POST'])
@@ -128,19 +126,19 @@ def classify_camera():
     prediction = predict_image(model=model, img=image, class_names=class_names)
     return jsonify({'prediction': prediction})
 
-# Helper function to check allowed file types
+# allowable formats
 def allowed_file(filename):
     allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
-# Prediction helper function
+# rgba to rgb, no error in model 4->3
 def predict_image(model, img, class_names):
     if img.mode == 'RGBA':
-        img = img.convert('RGB')  # Convert RGBA to RGB
+        img = img.convert('RGB')  
 
-    img = tf.image.resize(np.array(img), size=[224, 224])  # Resize to the required size
+    img = tf.image.resize(np.array(img), size=[224, 224])  
     img = img / 255.0  # Normalize the image
-    prediction = model.predict(tf.expand_dims(img, axis=0))  # Add batch dimension
+    prediction = model.predict(tf.expand_dims(img, axis=0)) 
     predicted_class = class_names[int(tf.round(prediction))]
 
     return predicted_class

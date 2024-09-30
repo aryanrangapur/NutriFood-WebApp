@@ -10,13 +10,12 @@
     <div class="container">
         <h2>Food Classification Result</h2>
 
-        <!-- Display the uploaded image -->
+       
         <div>
             <h4>Uploaded Image:</h4>
             <img src="data:image/jpeg;base64,{{ img_data }}" alt="Uploaded Image" style="max-width: 200px; max-height: 200px;">
         </div>
 
-        <!-- Display the prediction result -->
         <h3>Prediction: {{ prediction }}</h3>
 
         <a href="{{ url_for('home') }}">Classify another image</a>
