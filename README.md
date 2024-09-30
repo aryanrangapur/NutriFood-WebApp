@@ -38,7 +38,7 @@ A web application for food classification using machine learning models. Users c
 
 4. Run the Flask app:
     ```bash
-    python app.py
+    python ps.py
     ```
 
 5. Open a browser and navigate to `http://localhost:5000` to access the application.
@@ -60,7 +60,5 @@ The classification model is a Convolutional Neural Network (CNN) trained using T
 - Improve UI/UX for better user interaction.
 - Enhance prediction accuracy by training on more diverse datasets.
 
-## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
