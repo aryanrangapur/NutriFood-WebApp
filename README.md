@@ -1,4 +1,4 @@
-# Food-Classification WebApp
+# VisionCuisineApp (A Food-Classification WebApp)
 
 A web application for food classification using machine learning models. Users can upload images of food or take pictures using their camera, and the application will predict the type of food using a trained CNN model.
 
