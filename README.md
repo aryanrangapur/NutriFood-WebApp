@@ -38,7 +38,7 @@ A web application for food classification using machine learning models. Users c
 
 4. Run the Flask app:
     ```bash
-    python ps.py
+    python app.py
     ```
 
 5. Open a browser and navigate to `http://localhost:5000` to access the application.
