@@ -1,0 +1,6 @@
+Flask==2.2.5
+pymongo==4.5.0
+Werkzeug==2.2.3
+tensorflow==2.13.0
+numpy==1.24.2
+Pillow==9.4.0
