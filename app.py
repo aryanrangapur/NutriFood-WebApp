@@ -1,12 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from pymongo import MongoClient
+from tensorflow.keras.models import load_model
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from PIL import Image
-# import tensorflow as tf
+import tensorflow as tf
 import numpy as np
 import base64
 import io
+import os
 
 app = Flask(__name__)
 
@@ -15,8 +17,23 @@ client = MongoClient("mongodb+srv://aryanrangapur414:aryanbhai@cluster0.mbryk.mo
 db = client['user_db']
 users_collection = db['users']
 
+
+def custom_binary_crossentropy(*args, **kwargs):
+    return tf.keras.losses.BinaryCrossentropy()
+
 # Load your trained food classification model
-# model = tf.keras.models.load_model('path_to_your_model.h5')  # Replace with the actual model path
+model = load_model('food_CNN.h5', custom_objects={'BinaryCrossentropy': custom_binary_crossentropy})
+  # Replace with the actual model path
+
+# Define the label map for your food classification model (this should match the class indices of your model)
+def load_and_pred(model, img,class_names):
+    img = tf.image.resize(img, size=[224, 224])
+    img = img / 255.0
+
+    prediction = model.predict(tf.expand_dims(img, axis=0))
+    predicted_class = class_names[int(tf.round(prediction))]
+
+    return predicted_class
 
 @app.route('/')
 def index():
@@ -33,13 +50,13 @@ def signin():
         if user and check_password_hash(user['password'], password):
             return redirect(url_for('home'))
         else:
-            error_message="Invalid credentials. Try again."
+            error_message = "Invalid credentials. Try again."
     
-    return render_template('signin.html',error_message=error_message)
+    return render_template('signin.html', error_message=error_message)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    error_message = None  # Initialize error_message as None
+    error_message = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -57,70 +74,48 @@ def signup():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    prediction_result = None
-    
-    # If a POST request is made (form submission), process the image for classification
     if request.method == 'POST':
         if 'file' in request.files:
             file = request.files['file']
             if file.filename != '':
-                img = Image.open(file)
-                prediction_result = predict_image(img)
+                # Save the image to display later
+                filename = secure_filename(file.filename)
+                filepath = os.path.join('static/uploads', filename)
+                file.save(filepath)
+                
+                # Make prediction on the image
+                prediction = predict_image(filepath)
+                
+                # Redirect to result page with image path and prediction result
+                return redirect(url_for('result', image_url=filepath, prediction=prediction))
     
-    return render_template('home.html', prediction_result=prediction_result)
+    return render_template('home.html')
 
-# Handle food classification via file upload
-@app.route('/classify', methods=['POST'])
-def classify():
-    if 'file' not in request.files:
-        return "No file uploaded", 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return "No selected file", 400
-
-    if file:
-        filename = secure_filename(file.filename)
-        img = Image.open(file)
-        prediction = predict_image(img)
-        return f"Prediction: {prediction}"
-
-# Handle food classification via camera input
-@app.route('/classify-camera', methods=['POST'])
-def classify_camera():
-    data = request.get_json()
-    if 'image' not in data:
-        return jsonify({'prediction': None, 'error': 'No image data received'}), 400
+@app.route('/result')
+def result():
+    image_url = request.args.get('image_url')
+    prediction = request.args.get('prediction')
     
-    image_data = data['image']
-    if not image_data:
-        return jsonify({'prediction': None, 'error': 'Image data is empty'}), 400
-    
-    # Decode base64 image
-    image_data = base64.b64decode(image_data.split(',')[1])
-    image = Image.open(io.BytesIO(image_data))
-
-    prediction = predict_image(image)
-    return jsonify({'prediction': prediction})
-
-
+    return render_template('result.html', image_url=image_url, prediction=prediction)
 
 # Prediction helper function
-def predict_image(image):
+def predict_image(filepath):
     # Preprocess the image to fit your model's input size
-    img = image.resize((224, 224))  # Resize to the required size
+    img = Image.open(filepath)
+    img = img.resize((224, 224))  # EfficientNetB0 expects 224x224 input
     img = np.array(img) / 255.0  # Normalize the image
     img = np.expand_dims(img, axis=0)  # Add batch dimension
 
-    # Predict using the model
-    # prediction = model.predict(img)
+    # Predict using the loaded EfficientNetB0 model
+    prediction = model.predict(img)
     
-    # Convert the prediction to readable label (e.g., food name)
-    # label = np.argmax(prediction, axis=1)
-    # Assuming you have a label map, e.g., {0: 'Pizza', 1: 'Burger'}
-    label_map = {0: 'Pizza', 1: 'Burger'}  # Adjust according to your model classes
-    # return label_map.get(label[0], "Unknown food")
+    # Convert the prediction to a readable label (e.g., food name)
+    label = np.argmax(prediction, axis=1)
+    
+    # Return the food label from the label map
+    return label_map.get(label[0], "Unknown food")
 
 if __name__ == '__main__':
+    if not os.path.exists('static/uploads'):
+        os.makedirs('static/uploads')
     app.run(host='0.0.0.0', port=5000, debug=True)
-
