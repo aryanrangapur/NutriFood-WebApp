@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from PIL import Image
 import tensorflow as tf
 import numpy as np
@@ -69,7 +70,6 @@ def signup():
 def home():
     prediction_result = None
     nutrition_info = None
-    img_base64 = None  # Initialize img_base64 here
 
     if request.method == 'POST':
         if 'file' in request.files:
@@ -79,69 +79,40 @@ def home():
                     img = Image.open(file)
                     prediction_result = predict_image(model=model, img=img, class_names=class_names)
 
-                    # Convert image to base64 to display on the result page
-                    img_io = io.BytesIO()
-                    img.save(img_io, format='JPEG')
-                    img_io.seek(0)
-                    img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
-
                     # Fetch nutrition information based on the prediction result
                     nutrition_info = get_nutrition_info(prediction_result)
 
                 except OSError:
                     return render_template('home.html', prediction_result="This file type is not allowed.")
     
-    return render_template('home.html', prediction_result=prediction_result, nutrition_info=nutrition_info, img_data=img_base64)
+    return render_template('home.html', prediction_result=prediction_result, nutrition_info=nutrition_info)
 
-@app.route('/fetch_nutrition_with_quantity', methods=['POST'])
-def fetch_nutrition_with_quantity():
-    food_item = request.form['food_item']
-    quantity = request.form['quantity']
-
-    # Fetch nutrition information based on the prediction result and the quantity
-    nutrition_info = get_nutrition_info(food_item, quantity)
-
-    return render_template('result.html', prediction=food_item, nutrition_info=nutrition_info, img_data=request.form['img_data'])
-
-def get_nutrition_info(food_item, quantity=None):
+# Nutrition API function
+def get_nutrition_info(food_item):
     params = {
         'app_id': EDAMAM_API_ID,
         'app_key': EDAMAM_API_KEY,
-        'ingr': f"{quantity} g {food_item}" if quantity else food_item  # Specify quantity in the API request
+        'ingr': food_item  # The predicted food item
     }
 
     response = requests.get(EDAMAM_API_URL, params=params)
 
     if response.status_code == 200:
         nutrition_data = response.json()
-        
-        # Extracting required data
         calories = nutrition_data.get('calories', 'N/A')
         total_weight = nutrition_data.get('totalWeight', 'N/A')
         diet_labels = nutrition_data.get('dietLabels', [])
         health_labels = nutrition_data.get('healthLabels', [])
-        
-        # New fields
-        meal_type = nutrition_data.get('mealType', 'N/A')
-        dish_type = nutrition_data.get('dishType', 'N/A')
-        cuisine_type = nutrition_data.get('cuisineType', 'N/A')
-        nutrients = nutrition_data.get('totalNutrients', {})
 
         # Return useful information
         return {
             'calories': calories,
             'total_weight': total_weight,
-            'diet_labels': [label.lower().replace('_', ' ') for label in diet_labels],
-            'health_labels': [label.lower().replace('_', ' ') for label in health_labels],
-            'meal_type': meal_type,
-            'dish_type': dish_type,
-            'cuisine_type': cuisine_type,
-            'nutrients': {key.lower().replace('_', ' '): value for key, value in nutrients.items()}
-    
+            'diet_labels': diet_labels,
+            'health_labels': health_labels
         }
     else:
         return None
-
 
 @app.route('/classify', methods=['POST'])
 def classify():

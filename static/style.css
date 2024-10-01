@@ -4,7 +4,6 @@ body {
     background-size: cover;
     background-position: center;
     font-family: 'Poppins', sans-serif;
-    /* background-color: #f0f0f0; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,12 +12,14 @@ body {
 }
 
 .container {
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white for better visibility against the background */
     padding: 40px; 
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    width: 350px; 
+    border-radius: 12px; /* Increased border radius for a softer look */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+    width: 700px; /* Increased width for the container */
+    max-width: 90%; /* Ensure it doesn't overflow on smaller screens */
     text-align: center;
+    height: auto; /* Allow height to adjust based on content */
 }
 
 h2 {
@@ -37,7 +38,7 @@ label {
     font-weight: bold;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="number"] {
     padding: 12px; 
     margin-bottom: 16px; 
     border-radius: 5px;
@@ -72,4 +73,3 @@ a {
 a:hover {
     text-decoration: underline;
 }
-
