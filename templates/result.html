@@ -61,7 +61,7 @@
         }
 
         .btn:hover {
-            background-color: #d10c21;
+            background-color: #ddbb10;
         }
 
         .hidden {
@@ -74,7 +74,13 @@
         <h2>Prediction Result</h2>
         <img src="data:image/jpeg;base64,{{ img_data }}" alt="Uploaded Image" />
         <h3>Predicted Food Item: {{ prediction }}</h3>
-        
+        <form action="{{ url_for('fetch_nutrition_with_quantity') }}" method="POST">
+            <input type="hidden" name="food_item" value="{{ prediction }}">
+            <input type="hidden" name="img_data" value="{{ img_data }}">
+            <label for="quantity">Enter Quantity (grams):</label>
+            <input type="number" id="quantity" name="quantity" required>
+            <button type="submit" class="btn">Get Nutrition Info</button>
+        </form>
         <h4>Nutrition Information:</h4>
         <div class="nutrition-info">
             <p><strong>Calories:</strong> {{ nutrition_info['calories'] }}</p>
@@ -92,13 +98,7 @@
                 {% endfor %}
             </ul>
 
-        <form action="{{ url_for('fetch_nutrition_with_quantity') }}" method="POST">
-            <input type="hidden" name="food_item" value="{{ prediction }}">
-            <input type="hidden" name="img_data" value="{{ img_data }}">
-            <label for="quantity">Enter Quantity (grams):</label>
-            <input type="number" id="quantity" name="quantity" required>
-            <button type="submit" class="btn">Get Nutrition Info</button>
-        </form>
+
         <a href="{{ url_for('home') }}">Classify another image</a>
     </div>
 </body>
