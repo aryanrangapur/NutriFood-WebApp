@@ -14,13 +14,13 @@ app = Flask(__name__)
 class_names = ["Pizza", "Steak"]
 
 # MongoDB connection
-client = MongoClient("mongodb+srv://aryanrangapur414:aryanbhai@cluster0.mbryk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+client = MongoClient("mongodb+srv://<username>:<password>@cluster0.mbryk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db = client['user_db']
 users_collection = db['users']
 
 # Edamam API credentials
-EDAMAM_API_ID = '06d64f3c'
-EDAMAM_API_KEY = '30de0c0e7353addf15f68fdce6d73005'
+EDAMAM_API_ID = '<ID>'
+EDAMAM_API_KEY = '<API>'
 EDAMAM_API_URL = 'https://api.edamam.com/api/nutrition-data'
 
 def custom_binary_crossentropy(*args, **kwargs):
