@@ -74,3 +74,38 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+
+
+
+
+input[type="file"] {
+    width: 300px; /* Increase width */
+    height: 100px; /* Increase height */
+    border-radius: 10px; /* Add rounded corners */
+    border: 2px solid #ddd; /* Add a light border */
+    background-color: #f0f0f0; /* Light background color */
+    color: #333; /* Text color */
+    font-size: 16px; /* Adjust font size */
+    padding: 7px; /* Adjust padding */
+    margin: 10px auto; /* Add some margin and center it */
+    display: block; /* Center the element */
+    cursor: pointer; /* Show pointer on hover */
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    display: none; /* Hide the default upload button */
+}
+
+input[type="file"]:hover {
+    background-color: #ddd; /* Change background color on hover */
+}
+
+/* Styling for file name display */
+#fileName {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
