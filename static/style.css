@@ -7,21 +7,80 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white for better visibility against the background */
+    background-color: rgba(255, 255, 255, 0.95);
     padding: 40px; 
-    border-radius: 12px; /* Increased border radius for a softer look */
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
-    width: 700px; /* Increased width for the container */
-    max-width: 90%; /* Ensure it doesn't overflow on smaller screens */
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    width: 700px;
+    max-width: 90%;
     text-align: center;
-    height: auto; /* Allow height to adjust based on content */
+    height: auto;
 }
 
+/* Animated NutriFood heading styles */
+.keyboard {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-variation-settings: 'wght' 550; /* Maximum weight for boldness in variable fonts */
+    font-weight: 550;
+}
+
+.key {
+    font-size: 6vw;
+    display: inline-block;
+    letter-spacing: -0.5vw;
+    transition: transform 0.2s;
+}
+
+/* Animation keyframes */
+@keyframes pressDown1 {
+    30%, 40%, 100% {
+        transform: translateY(0);
+    }   
+    35% {
+        transform: translateY(10px);
+    }
+}
+
+@keyframes pressDown2 {
+    70%, 80%, 100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(15px);
+    }
+}
+
+/* Additional animation keyframes omitted for brevity */
+
+/* Apply animations to each letter */
+.key:nth-child(1) {
+    animation: pressDown1 4s infinite;
+}
+
+.key:nth-child(3) {
+    animation: pressDown2 1s infinite;
+}
+
+.key:nth-child(5) {
+    animation: pressDown1 5s infinite;
+
+}    
+.key:nth-child(7) {
+    animation: pressDown2 2s infinite;
+}
+.key:nth-child(9) {
+    animation: pressDown1 3s infinite;
+}
+/* Additional key animations... */
+
+/* Form styles */
 h2 {
     margin-bottom: 20px;
     font-weight: bold;
@@ -74,9 +133,6 @@ a {
 a:hover {
     text-decoration: underline;
 }
-
-
-
 
 
 input[type="file"] {

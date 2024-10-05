@@ -5,12 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Classification</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <style>
+        /* Animation styles */
+        @font-face {
+            font-family: 'TheFont';
+            src: url("https://garet.typeforward.com/assets/fonts/shared/TFMixVF.woff2") format('woff2');
+        }
+
+        @keyframes breatheAnimation {
+            0%, 100% {
+                font-variation-settings: 'wght' 100; /* Light weight */
+            }
+            50% {
+                font-variation-settings: 'wght' 900; /* Bold weight */
+            }
+        }
+
+        .breathe-heading {
+            font-family: 'TheFont';
+            animation: breatheAnimation 3s ease-in-out infinite; /* Breathe effect */
+            font-size: 3em; /* Increase font size for emphasis */
+            color: rgb(0, 0, 0); /* Change to white for better visibility */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
+            text-align: center; /* Center the text */
+            height: 1.5em; /* Fixed height to prevent movement */
+            line-height: 1.5; /* Set line height to match the height */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
+        <div class="keyboard">
+            <span class="key">N</span>
+            <span class="key">U</span>
+            <span class="key">T</span>
+            <span class="key">R</span>
+            <span class="key">I</span>
+            <span class="key">F</span>
+            <span class="key">O</span>
+            <span class="key">O</span>
+            <span class="key">D</span>
+        </div>
         <h2>Food Classification</h2>
 
-       
         <form action="/classify" method="POST" enctype="multipart/form-data">
             <label for="file">Upload an image of food:</label>
             <input type="file" id="file" name="file" accept="image/*" required>
@@ -33,9 +71,14 @@
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(function(stream) {
                     video.srcObject = stream;
+                })
+                .catch(function(err) {
+                    console.error("Error accessing camera: ", err);
+                    alert("Could not access camera. Please check your permissions.");
                 });
 
-            cameraButton.addEventListener('click', function() {
+            cameraButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent form submission
                 context.drawImage(video, 0, 0, 320, 240);
                 const dataUrl = canvas.toDataURL('image/png');
 
