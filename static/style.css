@@ -1,4 +1,4 @@
-/* General Styling */
+
 body {
     background-image: url('https://cdn.shopify.com/s/files/1/0633/7039/5889/files/junkfood_widescreen.jpg?v=1647737356'); /* Sample food background */
     background-size: cover;
@@ -23,11 +23,10 @@ body {
     height: auto;
 }
 
-/* Animated NutriFood heading styles */
 .keyboard {
     display: inline-block;
     margin-bottom: 20px;
-    font-variation-settings: 'wght' 550; /* Maximum weight for boldness in variable fonts */
+    font-variation-settings: 'wght' 550; 
     font-weight: 550;
 }
 
@@ -57,9 +56,7 @@ body {
     }
 }
 
-/* Additional animation keyframes omitted for brevity */
 
-/* Apply animations to each letter */
 .key:nth-child(1) {
     animation: pressDown2 4s infinite;
 }
@@ -95,7 +92,7 @@ body {
 }
 
 
-/* Form styles */
+
 h2 {
     margin-bottom: 20px;
     font-weight: bold;

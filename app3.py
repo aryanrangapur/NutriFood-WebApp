@@ -55,7 +55,6 @@ def signup():
         password = request.form['password']
         hashed_password = generate_password_hash(password)
         
-        # Check if the user already exists
         if users_collection.find_one({'username': username}):
             error_message = "Username already exists. Try signing in."
             return render_template('signup.html', error_message=error_message)
@@ -107,7 +106,7 @@ def get_nutrition_info(food_item, quantity=None):
     params = {
         'app_id': EDAMAM_API_ID,
         'app_key': EDAMAM_API_KEY,
-        'ingr': f"{quantity} g {food_item}" if quantity else food_item  # Specify quantity in the API request
+        'ingr': f"{quantity} g {food_item}" if quantity else food_item  
     }
 
     response = requests.get(EDAMAM_API_URL, params=params)
@@ -115,19 +114,16 @@ def get_nutrition_info(food_item, quantity=None):
     if response.status_code == 200:
         nutrition_data = response.json()
         
-        # Extracting required data
         calories = nutrition_data.get('calories', 'N/A')
         total_weight = nutrition_data.get('totalWeight', 'N/A')
         diet_labels = nutrition_data.get('dietLabels', [])
         health_labels = nutrition_data.get('healthLabels', [])
         
-        # New fields
         meal_type = nutrition_data.get('mealType', 'N/A')
         dish_type = nutrition_data.get('dishType', 'N/A')
         cuisine_type = nutrition_data.get('cuisineType', 'N/A')
         nutrients = nutrition_data.get('totalNutrients', {})
 
-        # Return useful information
         return {
             'calories': calories,
             'total_weight': total_weight,
@@ -152,14 +148,12 @@ def classify():
     if file.filename == '':
         return redirect(request.url)
 
-    # Validate file type
     if not allowed_file(file.filename):
         return render_template('result.html', prediction="This file type is not allowed.")
 
     try:
         img = Image.open(file.stream)
 
-        # Convert image to base64 to pass it to the template 
         img_io = io.BytesIO()
         img.save(img_io, format='JPEG')
         img_io.seek(0)
@@ -167,7 +161,6 @@ def classify():
 
         prediction = predict_image(model, img, class_names)
 
-        # Fetch nutrition info
         nutrition_info = get_nutrition_info(prediction)
 
         # Result page with the prediction and the image
@@ -185,18 +178,15 @@ def classify_camera():
     if not image_data:
         return jsonify({'prediction': None, 'error': 'Image data is empty'}), 400
     
-    # Decode base64 image
     image_data = base64.b64decode(image_data.split(',')[1])
     image = Image.open(io.BytesIO(image_data))
 
     prediction = predict_image(model=model, img=image, class_names=class_names)
 
-    # Fetch nutrition info
     nutrition_info = get_nutrition_info(prediction)
     
     return jsonify({'prediction': prediction, 'nutrition_info': nutrition_info})
 
-# Allowable formats
 def allowed_file(filename):
     allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
