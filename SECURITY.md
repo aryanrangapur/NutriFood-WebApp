@@ -51,8 +51,9 @@ The application uses the following dependencies, which should be regularly updat
 
 Regularly check for updates and apply them using:
 
-    ```bash
-          pip install --upgrade <package_name>
+   ```bash
+      pip install --upgrade <package_name>
+ ```
 
 
 This ensures that you are using the latest, most secure versions of your dependencies.
