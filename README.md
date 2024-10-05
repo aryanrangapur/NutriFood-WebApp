@@ -23,12 +23,12 @@ A web application for food classification using machine learning models. Users c
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/aryanrangapur/ML-WEB.git
+    https://github.com/aryanrangapur/NutriFood-WebApp.git
     ```
 
 2. Navigate to the project directory:
     ```bash
-    cd ML-WEB
+    cd NutriFood-WebApp
     ```
 
 3. Install the required Python packages:
@@ -38,7 +38,7 @@ A web application for food classification using machine learning models. Users c
 
 4. Run the Flask app:
     ```bash
-    python app.py
+    python app3.py
     ```
 
 5. If running locally, open a browser and navigate to `http://localhost:5000` to access the application.  
