@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Animation styles */
+        @keyframes fontChange {
+            0% {
+                font-family: 'Arial', sans-serif; /* Starting font */
+            }
+            20% {
+                font-family: 'Georgia', serif; /* Change to Georgia */
+            }
+            40% {
+                font-family: 'Lobster', cursive; /* Change to Times New Roman */
+            }
+            60% {
+                font-family: 'Courier New', monospace; /* Change to Courier New */
+            }
+            80% {
+                font-family: 'Dancing Script', cursive; /* Change to Comic Sans MS */
+            }
+            100% {
+                font-family: 'Arial', sans-serif; /* Return to starting font */
+            }
+        }
+
+        .animated-heading {
+            animation: fontChange 1s infinite; /* Duration for fast animation */
+            font-size: 3em; /* Increase font size for emphasis */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
+            height: 1.5em; /* Fixed height to prevent movement */
+            line-height: 1.5; /* Set line height to match the height */
+            overflow: hidden; /* Prevent overflow during animation */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="animated-heading">NutriFood</h1>
+        <h2>Food Classification</h2>
+
+        <form action="/classify" method="POST" enctype="multipart/form-data">
+            <label for="file">Upload an image of food:</label>
+            <input type="file" id="file" name="file" accept="image/*" required>
+            <button type="submit">Upload and Classify</button>
+        </form>
+
+        <h3>OR</h3>
+        <button id="cameraButton">Take a picture with the camera</button>
+        <p>(for only PCs)</p>
+        
+        <video id="video" width="320" height="240" autoplay></video>
+        <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+        
+        <script>
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            const cameraButton = document.getElementById('cameraButton');
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                });
+
+            cameraButton.addEventListener('click', function() {
+                context.drawImage(video, 0, 0, 320, 240);
+                const dataUrl = canvas.toDataURL('image/png');
+
+                fetch('/classify-camera', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: dataUrl })
+                }).then(response => response.json())
+                  .then(data => {
+                      alert("Prediction: " + data.prediction);
+                  });
+            });
+        </script>
+    </div>
+</body>
+</html>
