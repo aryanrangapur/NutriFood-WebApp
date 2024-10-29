@@ -17,7 +17,7 @@ A web application for food classification using machine learning models. Users c
 - **Machine Learning Model**: TensorFlow, Keras (CNN)
 - **Database**: MongoDB (for user authentication)
 - **Image Processing**: Pillow (PIL)
-- **Deployment**: Deployed on AWS (accessible at `http://13.60.217.221/`)
+- **Deployment**: Deployed on AWS (accessible at `http://13.60.217.221/`(temp. stop))
 
 ## Setup Instructions
 
